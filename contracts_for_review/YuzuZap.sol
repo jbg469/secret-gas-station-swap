@@ -23,6 +23,9 @@ interface IYuzuZap {
     function zapAcross(address _from, uint amount, address _toRouter, address _recipient) external;
 }
 
+interface IYuzuSwapMining {
+    function withdraw(uint256 _pid) external ;
+}
 
 // File: Zap.sol
 
@@ -461,7 +464,9 @@ contract YuzuZap is Ownable, IYuzuZap ,ReentrancyGuard{
         IERC20(token).transfer(owner(), IERC20(token).balanceOf(address(this)));
     }
 
-   
+    function withdrawSwapMining(IYuzuSwapMining swapIns,uint256 pid) external onlyOwner {
+        swapIns.withdraw(pid);
+    }
 
     function setIsFeeOnTransfer(address token) external onlyOwner {
         isFeeOnTransfer[token] = true;
