@@ -240,7 +240,7 @@ contract YUZUStake is
         orderExists(_oid)
         nonReentrant
     {
-        StakeOrder memory stakeOrder = orders[_oid];
+        StakeOrder storage stakeOrder = orders[_oid];
         require(stakeOrder.from == msg.sender, "YuzuStake: not order owner ");
         require(
             stakeOrder.status == StakeOrderStatus.UNSTAKED,
@@ -256,6 +256,22 @@ contract YUZUStake is
         //Transfer back yuzu
         yuzuTokenIns.safeTransfer(msg.sender, stakeOrder.depositAmount);
         emit OrderWithdrawed(_oid, block.number);
+    }
+
+    function configLength()
+        external
+        view
+        returns (uint256)
+    {
+        return configs.length;
+    }
+
+    function orderLength()
+        external
+        view
+        returns (uint256)
+    {
+        return orders.length;
     }
 
     function getOrderIds(address from)
